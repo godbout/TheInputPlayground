@@ -42,7 +42,11 @@ private struct InputTextField: View {
         
     var body: some View {
         
-        TextField("", text: $theInput.value)
+        ZStack(alignment: .leading) {
+            Text("X" + theInput.value + "X")
+                .opacity(0)
+            TextField("", text: $theInput.value)
+        }
             .textFieldStyle(.plain)
             .font(.system(size: inputTextSize))
             .frame(minWidth: inputWidth, alignment: .leading)
