@@ -39,20 +39,30 @@ private struct InputTextField: View {
     private var inputWidth: Double = TheInputView.inputWidthDefault
     
     @EnvironmentObject var theInput: TheInput
+    @State private var width = TheInputView.inputWidthDefault
         
     var body: some View {
         
         ZStack(alignment: .leading) {
-            Text("X" + theInput.value + "X")
+            Text("X" + theInput.value + "XX")
+                .fixedSize()
                 .opacity(0)
+                .background(GeometryReader { gp in 
+                    Color.clear
+                        .onAppear { width = gp.frame(in: .local).size.width }
+                        .onChange(of: gp.size) { _ in width = gp.frame(in: .local).size.width }
+                })
             TextField("", text: $theInput.value)
+                .textFieldStyle(.plain)
         }
-            .textFieldStyle(.plain)
-            .font(.system(size: inputTextSize))
-            .frame(minWidth: inputWidth, alignment: .leading)
-            .fixedSize()
-            .padding(6)
-            .padding(.trailing)
+        .font(.system(size: inputTextSize))
+        .onChange(of: width) {
+            var rect = theInput.frame
+            rect.size.width = $0
+            theInput.setFrame(rect, display: false, animate: false)
+        }
+        .padding(.trailing)
+        .padding(6)
     }
         
 }
